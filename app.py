@@ -2,6 +2,7 @@ import streamlit as st
 import gspread
 import uuid
 import requests
+import time
 from datetime import datetime
 from google.oauth2.service_account import Credentials
 
@@ -52,7 +53,6 @@ st.markdown("""
 GIPHY_API_KEY = st.secrets["giphy"]["api_key"]
 
 
-# Google Sheets connection
 @st.cache_resource
 def get_gsheet_connection():
     scopes = [
@@ -230,7 +230,7 @@ with gif_col1:
     gif_search = st.text_input("Search GIFs", placeholder="e.g. goodbye, good luck, thank you, party...")
 with gif_col2:
     st.markdown("<br>", unsafe_allow_html=True)
-    search_clicked = st.button("🔍 Search", use_container_width=True)
+    search_clicked = st.button("🔍 Search", width="stretch")
 
 if search_clicked and gif_search.strip():
     st.session_state.gif_results = search_gifs(gif_search.strip())
@@ -242,7 +242,7 @@ quick_cols = st.columns(6)
 quick_searches = ["👋 Goodbye", "🍀 Good Luck", "🎉 Celebration", "🫶 Thank You", "😂 Funny", "💐 Flowers"]
 for i, label in enumerate(quick_searches):
     with quick_cols[i]:
-        if st.button(label, use_container_width=True):
+        if st.button(label, width="stretch"):
             st.session_state.gif_results = search_gifs(label)
             st.session_state.selected_gif = None
 
@@ -252,8 +252,8 @@ if st.session_state.gif_results:
     gif_cols = st.columns(4)
     for i, gif in enumerate(st.session_state.gif_results):
         with gif_cols[i % 4]:
-            st.image(gif["preview"], use_container_width=True)
-            if st.button("Select", key=f"gif_{i}", use_container_width=True):
+            st.image(gif["preview"], width="stretch")
+            if st.button("Select", key=f"gif_{i}", width="stretch"):
                 st.session_state.selected_gif = gif["full"]
                 st.rerun()
 
@@ -270,14 +270,18 @@ if st.session_state.selected_gif:
 
 # Submit
 st.divider()
-if st.button("Add message 🎉", type="primary", use_container_width=True):
+if st.button("Add message 🎉", type="primary", width="stretch"):
     if name.strip() and message.strip():
-        add_message(name.strip(), message.strip(), st.session_state.selected_gif)
-        st.session_state.selected_gif = None
-        st.session_state.gif_results = []
-        st.cache_resource.clear()
-        st.success("Thank you for your message! 🙏")
-        st.rerun()
+        try:
+            add_message(name.strip(), message.strip(), st.session_state.selected_gif)
+            st.session_state.selected_gif = None
+            st.session_state.gif_results = []
+            st.cache_resource.clear()
+            st.success("Thank you for your message! 🙏")
+            time.sleep(1)
+            st.rerun()
+        except Exception as e:
+            st.error(f"Something went wrong: {e}")
     else:
         st.warning("Please fill in both your name and message.")
 
@@ -330,7 +334,7 @@ with st.expander("⚙️ Admin"):
             data=html_export,
             file_name="farewell_marie.html",
             mime="text/html",
-            use_container_width=True
+            width="stretch"
         )
 
         st.divider()
