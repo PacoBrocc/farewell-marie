@@ -50,6 +50,99 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
+# Countdown
+from datetime import datetime
+import pytz
+
+farewell_date = datetime(2026, 3, 25, 8, 0, 0)  # 25 March, 8:00 AM
+
+st.markdown("""
+<style>
+    .countdown-container {
+        text-align: center;
+        padding: 20px;
+        margin: 10px auto;
+        max-width: 600px;
+    }
+    .countdown-title {
+        font-size: 1.2em;
+        color: #667eea;
+        margin-bottom: 10px;
+    }
+    .countdown-boxes {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+    }
+    .countdown-box {
+        background: white;
+        border-radius: 12px;
+        padding: 15px 20px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        min-width: 80px;
+    }
+    .countdown-number {
+        font-size: 2em;
+        font-weight: bold;
+        color: #667eea;
+    }
+    .countdown-label {
+        font-size: 0.85em;
+        color: #888;
+        margin-top: 5px;
+    }
+</style>
+<div class="countdown-container">
+    <div class="countdown-title">⏳ Countdown to Marie's farewell breakfast</div>
+    <div class="countdown-boxes" id="countdown">
+        <div class="countdown-box">
+            <div class="countdown-number" id="days">-</div>
+            <div class="countdown-label">Days</div>
+        </div>
+        <div class="countdown-box">
+            <div class="countdown-number" id="hours">-</div>
+            <div class="countdown-label">Hours</div>
+        </div>
+        <div class="countdown-box">
+            <div class="countdown-number" id="minutes">-</div>
+            <div class="countdown-label">Minutes</div>
+        </div>
+        <div class="countdown-box">
+            <div class="countdown-number" id="seconds">-</div>
+            <div class="countdown-label">Seconds</div>
+        </div>
+    </div>
+</div>
+<script>
+    function updateCountdown() {
+        const farewell = new Date('2026-03-25T08:00:00');
+        const now = new Date();
+        const diff = farewell - now;
+
+        if (diff <= 0) {
+            document.getElementById('days').textContent = '🎉';
+            document.getElementById('hours').textContent = '🎉';
+            document.getElementById('minutes').textContent = '🎉';
+            document.getElementById('seconds').textContent = '🎉';
+            return;
+        }
+
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+        document.getElementById('days').textContent = days;
+        document.getElementById('hours').textContent = hours;
+        document.getElementById('minutes').textContent = minutes;
+        document.getElementById('seconds').textContent = seconds;
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+</script>
+""", unsafe_allow_html=True)
+
 GIPHY_API_KEY = st.secrets["giphy"]["api_key"]
 
 
