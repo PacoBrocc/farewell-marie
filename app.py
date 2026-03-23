@@ -102,6 +102,17 @@ def delete_message(msg_id):
     except Exception as e:
         st.error(f"Could not delete message: {e}")
 
+def update_message(msg_id, new_name, new_message):
+    try:
+        sheet = get_gsheet_connection()
+        records = sheet.get_all_records()
+        for i, record in enumerate(records):
+            if record.get("id") == msg_id:
+                sheet.update_cell(i + 2, 2, new_name)
+                sheet.update_cell(i + 2, 3, new_message)
+                break
+    except Exception as e:
+        st.error(f"Could not update message: {e}")
 
 def search_gifs(query, limit=12):
     try:
@@ -314,17 +325,52 @@ else:
 st.divider()
 with st.expander("⚙️ Admin"):
     if messages:
-        st.markdown("**Delete individual messages:**")
+        # Initialize edit state
+        if "editing_id" not in st.session_state:
+            st.session_state.editing_id = None
+
+        st.markdown("**Manage messages:**")
         for msg in reversed(messages):
-            col1, col2 = st.columns([4, 1])
-            with col1:
-                st.markdown(
-                    f"**{msg['name']}** – _{str(msg['message'])[:50]}{'...' if len(str(msg['message'])) > 50 else ''}_")
-            with col2:
-                if st.button("🗑️", key=f"del_{msg.get('id', msg['timestamp'])}"):
-                    delete_message(msg.get("id"))
-                    st.cache_resource.clear()
-                    st.rerun()
+            msg_id = msg.get("id", msg["timestamp"])
+
+            # Editing mode
+            if st.session_state.editing_id == msg_id:
+                st.markdown("---")
+                st.markdown("**✏️ Editing message:**")
+                edited_name = st.text_input("Name", value=msg["name"], key=f"edit_name_{msg_id}")
+                edited_message = st.text_area("Message", value=msg["message"], key=f"edit_msg_{msg_id}")
+
+                save_col, cancel_col = st.columns(2)
+                with save_col:
+                    if st.button("💾 Save", key=f"save_{msg_id}", width="stretch"):
+                        if edited_name.strip() and edited_message.strip():
+                            update_message(msg_id, edited_name.strip(), edited_message.strip())
+                            st.session_state.editing_id = None
+                            st.cache_resource.clear()
+                            st.rerun()
+                        else:
+                            st.warning("Name and message cannot be empty.")
+                with cancel_col:
+                    if st.button("❌ Cancel", key=f"cancel_{msg_id}", width="stretch"):
+                        st.session_state.editing_id = None
+                        st.rerun()
+                st.markdown("---")
+
+            # Normal display mode
+            else:
+                col1, col2, col3 = st.columns([4, 0.5, 0.5])
+                with col1:
+                    st.markdown(
+                        f"**{msg['name']}** – _{str(msg['message'])[:50]}{'...' if len(str(msg['message'])) > 50 else ''}_")
+                with col2:
+                    if st.button("✏️", key=f"edit_{msg_id}"):
+                        st.session_state.editing_id = msg_id
+                        st.rerun()
+                with col3:
+                    if st.button("🗑️", key=f"del_{msg_id}"):
+                        delete_message(msg_id)
+                        st.cache_resource.clear()
+                        st.rerun()
 
         st.divider()
         st.markdown("**Export board:**")
