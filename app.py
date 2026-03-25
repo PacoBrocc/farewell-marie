@@ -6,7 +6,7 @@ import time
 from datetime import datetime
 from google.oauth2.service_account import Credentials
 
-st.set_page_config(page_title="All the best, Marie!", page_icon="🎉", layout="wide")
+st.set_page_config(page_title="All the best, Anka!", page_icon="🎉", layout="wide")
 
 # Custom CSS
 st.markdown("""
