@@ -144,7 +144,7 @@ def export_to_html(messages):
     <html>
     <head>
         <meta charset="utf-8">
-        <title>All the best, Anka! 🎉</title>
+        <title>All the best, Marie! 🎉</title>
         <style>
             body {
                 font-family: 'Segoe UI', Arial, sans-serif;
@@ -184,7 +184,7 @@ def export_to_html(messages):
     </head>
     <body>
         <div class="header">
-            <h1>All the best, Anka! 🎉</h1>
+            <h1>All the best, Marie! 🎉</h1>
             <p>💌 MESSAGECOUNT messages from the team</p>
         </div>
         <div class="board">
@@ -216,7 +216,7 @@ if "gif_results" not in st.session_state:
 
 # Header
 st.markdown("<div class='header-container'>", unsafe_allow_html=True)
-st.title("All the best, Marie! 🎉")
+st.title("All the best, Anka! 🎉")
 st.markdown("### Leave your farewell message 💬")
 st.markdown("</div>", unsafe_allow_html=True)
 
