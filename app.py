@@ -6,7 +6,7 @@ import time
 from datetime import datetime
 from google.oauth2.service_account import Credentials
 
-st.set_page_config(page_title="All the best, Anka!", page_icon="🎉", layout="wide")
+st.set_page_config(page_title="All the best, Marie!", page_icon="🎉", layout="wide")
 
 # Custom CSS
 st.markdown("""
@@ -184,7 +184,7 @@ def export_to_html(messages):
     </head>
     <body>
         <div class="header">
-            <h1>All the best, Marie! 🎉</h1>
+            <h1>All the best, Anka! 🎉</h1>
             <p>💌 MESSAGECOUNT messages from the team</p>
         </div>
         <div class="board">
