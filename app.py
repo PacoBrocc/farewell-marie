@@ -216,7 +216,7 @@ if "gif_results" not in st.session_state:
 
 # Header
 st.markdown("<div class='header-container'>", unsafe_allow_html=True)
-st.title("All the best, Anka! 🎉")
+st.title("All the best, Marie! 🎉")
 st.markdown("### Leave your farewell message 💬")
 st.markdown("</div>", unsafe_allow_html=True)
 
