@@ -144,7 +144,7 @@ def export_to_html(messages):
     <html>
     <head>
         <meta charset="utf-8">
-        <title>All the best, Marie! 🎉</title>
+        <title>All the best, Anka! 🎉</title>
         <style>
             body {
                 font-family: 'Segoe UI', Arial, sans-serif;
